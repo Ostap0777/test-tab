@@ -1,0 +1,28 @@
+.back {
+	&__home {
+		width: 30px;
+		height: 30px;
+		margin-bottom: 20px;
+	}
+}
+
+.tab {
+	&__section {
+      padding-top: 20px;
+	}
+	&__content {
+
+	}
+	&__name {
+		font-size: 34px;
+		color: chocolate;
+		text-align: center;
+		padding-top: 100px;
+	}
+}
+
+.home {
+	&__link {
+		padding-left: 40px;
+	}
+}

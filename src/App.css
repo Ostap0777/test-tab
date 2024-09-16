@@ -1,38 +1,66 @@
-.App {
-  text-align: center;
+*,
+*::before,
+*::after {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	box-sizing: border-box;
+}
+a {
+	text-decoration: none;
+	color: inherit;
+}
+ul,
+ol,
+li {
+	list-style: none;
+}
+img {
+	vertical-align: top;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: inherit;
+	font-size: inherit;
+}
+html,
+body {
+	height: 100%;
+	line-height: 1;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+button,
+input {
+	font-weight: inherit;
+	font-size: inherit;
+	color: inherit;
+	font-family: inherit;
+}
+button {
+	cursor: pointer;
+	background-color: inherit;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+[class*="__container"] {
+	max-width: 1310px;
+	margin: 0 auto;
+	padding: 0px 15px;
+}
+.wrapper {
+   position: relative;
+ min-height: 100vh;
+ display: flex;
+ flex-direction: column;
+ overflow: hidden;
+
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.swiper-wrapper {
+	display: flex;
 }

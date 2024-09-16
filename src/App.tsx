@@ -1,25 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
+import { BrowserRouter, Route, Routes,} from 'react-router-dom';
+
+
+import HomePage from './Components/HomeApp/HomePage';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import TabId from './Components/TabId/TabId';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+	<DndProvider backend={HTML5Backend}>
+	<BrowserRouter>
+	<Routes>
+		 <Route path='/' element={<HomePage/>} />
+		 <Route path='tab/:id' element={<TabId/>}/>
+	</Routes>
+	</BrowserRouter>
+	</DndProvider>
   );
 }
 
