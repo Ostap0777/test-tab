@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { TabItems } from '../../models/models';
 import { getTabId } from '../../Service/service';
-import Tab from '../TabsComponent/Tab';
+import Tab from '../TabsComponent/Tab/Tab';
 import styles from './tabsId.module.scss';
 import { Link } from 'react-router-dom';
 import Loader from '../UI/Loader/Loader';

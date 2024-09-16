@@ -15,6 +15,7 @@ const jsonData = {
 		{ "id": "12", "name": "Rechn", "img": "/img/fi-rs-browser (1).svg" }
 	]
  };
+ 
 
 export const saveTabsToLocalStorage = () => {
 	localStorage.setItem('tabs', JSON.stringify(jsonData));

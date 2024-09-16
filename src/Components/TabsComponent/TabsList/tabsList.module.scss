@@ -1,0 +1,56 @@
+/* tabsList.module.scss */
+
+.tab__item {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	margin: 5px 0;
+	background-color: #f9f9f9;
+	border-radius: 5px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: background-color 0.3s ease;
+ 
+	&:hover {
+	  background-color: #e0e0e0;
+	}
+ }
+ 
+ .tab__img {
+	width: 24px;
+	height: 24px;
+	margin-right: 10px;
+ }
+ 
+ .tab__name {
+	flex-grow: 1;
+	font-size: 16px;
+	color: #333;
+	text-decoration: none;
+ }
+ 
+ .button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 5px;
+	transition: transform 0.3s ease;
+ 
+	&:hover {
+	  transform: scale(1.1);
+	}
+ }
+ 
+ .button__add,
+ .button__remove {
+	width: 20px;
+	height: 20px;
+ }
+ 
+ .button__add {
+	color: #4caf50; // Зелений для додавання
+ }
+ 
+ .button__remove {
+	color: #f44336; // Червоний для видалення
+ }
+ 
