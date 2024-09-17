@@ -58,3 +58,39 @@
 }
 
 
+.tab__section {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+ }
+ 
+ .tab__container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+ }
+ 
+ .tab__pinned {
+	display: flex;
+	flex-direction: row;
+	position: sticky;
+	left: 0;
+	background: white; /* Adjust if needed */
+	z-index: 2; /* Ensure it stays above other content */
+ }
+ 
+ .tab__overflow {
+	display: flex;
+	flex-direction: row;
+	flex: 1;
+	overflow-x: auto;
+	margin-left: auto; /* Pushes the overflow content to the right */
+ }
+ 
+ .tab__icon, .tab__vector {
+	height: 40px; /* Adjust according to your design */
+ }
+ 

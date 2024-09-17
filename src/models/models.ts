@@ -1,9 +1,12 @@
-export interface TabItems {
+export interface Tab {
 	id: string;
 	name: string;
 	img: string;
 	isPinned: boolean;
+	isOverflow?: boolean;
  }
+ 
+ export type TabItems = Tab;
  
  export const ItemTypes = {
 	TAB: 'TAB',

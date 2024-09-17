@@ -2,8 +2,7 @@ import React from 'react';
 import styles from './tabsList.module.scss';
 import { useDrag, useDrop } from 'react-dnd';
 import { Link } from 'react-router-dom';
-import { TabsListProps, Tab } from '../../../models/models';
-
+import { TabsListProps } from '../../../models/models';
 
 const TabsList: React.FC<TabsListProps> = ({ tab, index, moveTab, togglePinTab, tabs }) => {
   const [{ isDragging }, drag] = useDrag({
@@ -51,7 +50,7 @@ const TabsList: React.FC<TabsListProps> = ({ tab, index, moveTab, togglePinTab, 
       >
         {tab.isPinned ? (
           <img
-            className={styles.button__remove}  src="/img/free-icon-remove-1828843.png" alt="Remove"
+            className={styles.button__remove} src="/img/free-icon-remove-1828843.png" alt="Remove"
           />
         ) : (
           <img

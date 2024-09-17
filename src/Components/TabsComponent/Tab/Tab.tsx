@@ -7,7 +7,9 @@ import TabsList from '../TabsList/TabsList';
 import { saveTabsToLocalStorage } from '../../../saveToLocalStorage';
 
 const Tab: React.FC = () => {
-  const [tabs, setTabs] = useState<TabItems[]>([]);
+  const [pinnedTabs, setPinnedTabs] = useState<TabItems[]>([]);
+  const [overflowTabs, setOverflowTabs] = useState<TabItems[]>([]);
+  const [otherTabs, setOtherTabs] = useState<TabItems[]>([]);
   const [longPress, setLongPress] = useState<boolean>(false);
   const pressTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -20,11 +22,12 @@ const Tab: React.FC = () => {
       try {
         const parsedData = JSON.parse(storedTabs);
         console.log('Parsed Data:', parsedData);
-        const parsedTabs = parsedData.tab;
-        if (Array.isArray(parsedTabs)) {
-          setTabs(parsedTabs);
+        if (parsedData.pinnedTabs && parsedData.overflowTabs && parsedData.otherTabs) {
+          setPinnedTabs(parsedData.pinnedTabs);
+          setOverflowTabs(parsedData.overflowTabs);
+          setOtherTabs(parsedData.otherTabs);
         } else {
-          console.error('Stored data is not an array:', parsedTabs);
+          console.error('Stored data is incomplete or malformed:', parsedData);
         }
       } catch (error) {
         console.error('Error parsing JSON from localStorage:', error);
@@ -51,45 +54,78 @@ const Tab: React.FC = () => {
   };
 
   const moveTab = (fromIndex: number, toIndex: number) => {
-    const updatedTabs = [...tabs];
-    const [movedTab] = updatedTabs.splice(fromIndex, 1);
-    updatedTabs.splice(toIndex, 0, movedTab);
+    const allTabs = [...pinnedTabs, ...overflowTabs, ...otherTabs];
+    const [movedTab] = allTabs.splice(fromIndex, 1);
+    allTabs.splice(toIndex, 0, movedTab);
 
-    const finalTabs = updatedTabs.filter(tab => !tab.isPinned);
-    const pinnedTabs = tabs.filter(tab => tab.isPinned);
-    const newTabs = [...pinnedTabs, ...finalTabs];
-
-    setTabs(newTabs);
+    const updatedPinnedTabs = allTabs.filter(tab => tab.isPinned);
+    const updatedOverflowTabs = allTabs.filter(tab => !tab.isPinned && tab.isOverflow);
+    const updatedOtherTabs = allTabs.filter(tab => !tab.isPinned && !tab.isOverflow);
+    setPinnedTabs(updatedPinnedTabs);
+    setOverflowTabs(updatedOverflowTabs);
+    setOtherTabs(updatedOtherTabs);
+    saveTabsToLocalStorage(updatedPinnedTabs, updatedOverflowTabs, updatedOtherTabs);
   };
 
   const togglePinTab = (tabId: string) => {
-    const updatedTabs = tabs.map((tab) =>
+    const allTabs = [...pinnedTabs, ...overflowTabs, ...otherTabs];
+    const updatedTabs = allTabs.map((tab) =>
       tab.id === tabId ? { ...tab, isPinned: !tab.isPinned } : tab
     );
-    const sortedTabs = updatedTabs.sort((a, b) => (a.isPinned === b.isPinned ? 0 : a.isPinned ? -1 : 1));
 
-    setTabs(sortedTabs);
+    const updatedPinnedTabs = updatedTabs.filter(tab => tab.isPinned);
+    const updatedOverflowTabs = updatedTabs.filter(tab => !tab.isPinned && tab.isOverflow);
+    const updatedOtherTabs = updatedTabs.filter(tab => !tab.isPinned && !tab.isOverflow);
+
+    setPinnedTabs(updatedPinnedTabs);
+    setOverflowTabs(updatedOverflowTabs);
+    setOtherTabs(updatedOtherTabs);
+
+    saveTabsToLocalStorage(updatedPinnedTabs, updatedOverflowTabs, updatedOtherTabs);
   };
 
   return (
     <DndProvider backend={HTML5Backend}>
       <section className={styles.tab__section}>
         <div 
-          className={styles.tab__content}
+          className={styles.tab__container}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <img className={styles.tab__icon} src="/img/fi-rs-box-alt.svg" alt="" />
-          {tabs.map((tab, index) => (
-            <TabsList
-              key={tab.id}
-              tab={tab}
-              index={index}
-              moveTab={moveTab}
-              togglePinTab={togglePinTab}
-              tabs={tabs}
-            />
-          ))}
+          <div className={styles.tab__pinned}>
+            {pinnedTabs.map((tab, index) => (
+              <TabsList
+                key={tab.id}
+                tab={tab}
+                index={index}
+                moveTab={moveTab}
+                togglePinTab={togglePinTab}
+                tabs={pinnedTabs}
+              />
+            ))}
+          </div>
+          <div className={styles.tab__overflow}>
+            {overflowTabs.map((tab, index) => (
+              <TabsList
+                key={tab.id}
+                tab={tab}
+                index={index}
+                moveTab={moveTab}
+                togglePinTab={togglePinTab}
+                tabs={overflowTabs}
+              />
+            ))}
+            {otherTabs.map((tab, index) => (
+              <TabsList
+                key={tab.id}
+                tab={tab}
+                index={index}
+                moveTab={moveTab}
+                togglePinTab={togglePinTab}
+                tabs={otherTabs}
+              />
+            ))}
+          </div>
           <img className={styles.tab__vector} src="/img/Vector (13).svg" alt="" />
         </div>
       </section>
