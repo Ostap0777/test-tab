@@ -93,6 +93,7 @@ const Tab: React.FC = () => {
           onTouchEnd={handleTouchEnd}
         >
           <div className={styles.tab__pinned}>
+				<img className={styles.tab__icon} src="/img/fi-rs-box-alt.svg" alt="" />
             {pinnedTabs.map((tab, index) => (
               <TabsList
                 key={tab.id}
