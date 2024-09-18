@@ -26,3 +26,13 @@ export interface Tab {
 	togglePinTab: (tabId: string) => void;
 	tabs: Tab[];
  }
+
+export interface ListItem {
+	id: string;
+	name: string;
+ }
+
+export interface TabDivElement extends HTMLDivElement {
+	tab: TabItems;
+ }
+ 

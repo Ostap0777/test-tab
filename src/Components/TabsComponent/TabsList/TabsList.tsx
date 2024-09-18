@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ForwardedRef, forwardRef } from 'react';
 import styles from './tabsList.module.scss';
 import { useDrag, useDrop } from 'react-dnd';
 import { Link } from 'react-router-dom';
 import { TabsListProps } from '../../../models/models';
 
-const TabsList: React.FC<TabsListProps> = ({ tab, index, moveTab, togglePinTab, tabs }) => {
+const TabsList = forwardRef<HTMLDivElement, TabsListProps>(({ tab, index, moveTab, togglePinTab, tabs }, ref) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'TAB',
     item: { index },
@@ -31,9 +31,16 @@ const TabsList: React.FC<TabsListProps> = ({ tab, index, moveTab, togglePinTab, 
     },
   });
 
+  const combinedRef = (node: HTMLDivElement | null) => {
+    drag(drop(node));
+    if (ref) {
+      (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    }
+  };
+
   return (
     <div
-      ref={(node) => drag(drop(node))}
+      ref={combinedRef}
       className={styles.tab__item}
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
@@ -60,6 +67,6 @@ const TabsList: React.FC<TabsListProps> = ({ tab, index, moveTab, togglePinTab, 
       </button>
     </div>
   );
-};
+});
 
 export default TabsList;

@@ -18,7 +18,13 @@ const jsonData = {
  
  export const saveTabsToLocalStorage = (
 	pinnedTabs = [],
-	overflowTabs = [],
+	overflowTabs = [
+		{ "id": "8", "name": "Help", "img": "/img/fi-rs-book-alt (1).svg" },
+		{ "id": "9", "name": "Warenbestand", "img": "/img/fi-rs-cube (1).svg" },
+		{ "id": "10", "name": "Auswahllisten", "img": "/img/fi-rs-list (1).svg" },
+		{ "id": "11", "name": "Einkauf", "img": "/img/fi-rs-shopping-cart-check (1).svg" },
+		{ "id": "12", "name": "Rechn", "img": "/img/fi-rs-browser (1).svg" }
+	],
 	otherTabs = []
 ) => {
 

@@ -1,0 +1,22 @@
+.list {
+	&__section {
+		position: absolute;
+		top: 20%;
+		right: 0%;
+		background-color: rgb(246, 246, 246);
+		width: 200px;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		padding: 20px 10px;
+		border-radius: 20px;
+	}
+	&__name {
+		color: rgb(171, 171, 171);
+		font-size: 20px;
+		padding-bottom: 5px;
+		border-bottom: 2px solid #d4d4d4;
+
+	}
+}

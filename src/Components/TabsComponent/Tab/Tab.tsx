@@ -5,16 +5,53 @@ import styles from './tab.module.scss';
 import { TabItems } from '../../../models/models';
 import TabsList from '../TabsList/TabsList';
 import { saveTabsToLocalStorage } from '../../../saveToLocalStorage';
+import List from '../../List/List'; // Importing List component
 
 const Tab: React.FC = () => {
   const [pinnedTabs, setPinnedTabs] = useState<TabItems[]>([]);
   const [overflowTabs, setOverflowTabs] = useState<TabItems[]>([]);
   const [otherTabs, setOtherTabs] = useState<TabItems[]>([]);
   const [longPress, setLongPress] = useState<boolean>(false);
+  const [showList, setShowList] = useState<boolean>(false); // State for showing List component
   const pressTimer = useRef<NodeJS.Timeout | null>(null);
+  const tabRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
-    saveTabsToLocalStorage();
+    const observer = new IntersectionObserver((entries) => {
+      const visibleTabs = entries
+        .filter(entry => entry.isIntersecting)
+        .map(entry => entry.target.getAttribute('data-id'));
+
+      const allTabs = [...pinnedTabs, ...overflowTabs, ...otherTabs];
+      const visibleTabsIds = new Set(visibleTabs);
+
+      const updatedPinnedTabs = allTabs.filter(tab => tab.isPinned);
+      const updatedOverflowTabs = allTabs.filter(tab => !tab.isPinned && !visibleTabsIds.has(tab.id));
+      const updatedOtherTabs = allTabs.filter(tab => !tab.isPinned && visibleTabsIds.has(tab.id));
+
+      setPinnedTabs(updatedPinnedTabs);
+      setOverflowTabs(updatedOverflowTabs);
+      setOtherTabs(updatedOtherTabs);
+      saveTabsToLocalStorage(updatedPinnedTabs, updatedOverflowTabs, updatedOtherTabs);
+    }, { threshold: [1] });
+
+    tabRefs.current.forEach(ref => {
+      if (ref) {
+        observer.observe(ref);
+      }
+    });
+
+    return () => {
+      tabRefs.current.forEach(ref => {
+        if (ref) {
+          observer.unobserve(ref);
+        }
+      });
+    };
+  }, [pinnedTabs, overflowTabs, otherTabs]);
+
+  useEffect(() => {
+    saveTabsToLocalStorage(pinnedTabs, overflowTabs, otherTabs);
     const storedTabs = localStorage.getItem('tabs');
     console.log('Stored Tabs:', storedTabs);
 
@@ -84,6 +121,10 @@ const Tab: React.FC = () => {
     saveTabsToLocalStorage(updatedPinnedTabs, updatedOverflowTabs, updatedOtherTabs);
   };
 
+  const handleIconClick = () => {
+    setShowList(prevState => !prevState); // Toggle the List component visibility
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <section className={styles.tab__section}>
@@ -93,10 +134,11 @@ const Tab: React.FC = () => {
           onTouchEnd={handleTouchEnd}
         >
           <div className={styles.tab__pinned}>
-				<img className={styles.tab__icon} src="/img/fi-rs-box-alt.svg" alt="" />
+            <img className={styles.tab__icon} src="/img/fi-rs-box-alt.svg" alt="" />
             {pinnedTabs.map((tab, index) => (
               <TabsList
                 key={tab.id}
+                ref={(el) => tabRefs.current[index] = el as HTMLDivElement}
                 tab={tab}
                 index={index}
                 moveTab={moveTab}
@@ -109,6 +151,7 @@ const Tab: React.FC = () => {
             {overflowTabs.map((tab, index) => (
               <TabsList
                 key={tab.id}
+                ref={(el) => tabRefs.current[index + pinnedTabs.length] = el as HTMLDivElement}
                 tab={tab}
                 index={index}
                 moveTab={moveTab}
@@ -119,6 +162,7 @@ const Tab: React.FC = () => {
             {otherTabs.map((tab, index) => (
               <TabsList
                 key={tab.id}
+                ref={(el) => tabRefs.current[index + pinnedTabs.length + overflowTabs.length] = el as HTMLDivElement}
                 tab={tab}
                 index={index}
                 moveTab={moveTab}
@@ -127,9 +171,15 @@ const Tab: React.FC = () => {
               />
             ))}
           </div>
-          <img className={styles.tab__vector} src="/img/Vector (13).svg" alt="" />
         </div>
+        <img 
+          className={styles.tab__vector} 
+          src="/img/Vector (13).svg" 
+          alt="" 
+          onClick={handleIconClick}
+        />
       </section>
+		{showList && <List />} {/* Conditionally render List component */}
     </DndProvider>
   );
 };
